@@ -63,7 +63,7 @@ const Cart = () => {
                             </div>
                         </ScrollArea>
                     </div>
-
+                    {cartIsLoading && <></>}
                     {cart?.items && cart?.items.length > 0 && (
                         <div className="flex flex-col gap-4">
                             <Separator />
