@@ -3,6 +3,7 @@ import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 
+import { decreaseProductFromCart } from "@/actions/decrease-cart-product-quantity";
 import { removeProductFromCart } from "@/actions/remove-cart-product";
 import { formatCents } from "@/helpers/money";
 
@@ -34,6 +35,14 @@ const CardItem = ({
         },
     });
 
+    const decreaseProductFromCartMutation = useMutation({
+        mutationKey: ["decrease-cart-product-quantity"],
+        mutationFn: () => decreaseProductFromCart({ cartItemId: id }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
+        },
+    });
+
     const handleDeleteClick = () => {
         removeProductFromCartMutation.mutate(undefined, {
             onSuccess: () => {
@@ -41,6 +50,19 @@ const CardItem = ({
             },
             onError: () => {
                 toast.error("Erro ao remover produto do carrinho.");
+            },
+        });
+    };
+
+    const handleDecreaseClick = () => {
+        decreaseProductFromCartMutation.mutate(undefined, {
+            onSuccess: () => {
+                if (quantity > 1) {
+                    toast.success("Quantidade do produto diminuida.");
+                }
+            },
+            onError: () => {
+                toast.error("Erro ao diminuir produto do carrinho.");
             },
         });
     };
@@ -65,7 +87,7 @@ const CardItem = ({
                     <Button
                         className="w-4 h-4"
                         variant="ghost"
-                        onClick={() => {}}
+                        onClick={handleDecreaseClick}
                     >
                         <MinusIcon size={12} />
                     </Button>
