@@ -48,6 +48,9 @@ const Cart = () => {
                                         productName={
                                             item.productVariant.product.name
                                         }
+                                        productVariantId={
+                                            item.productVariant.id
+                                        }
                                         productVariantName={
                                             item.productVariant.name
                                         }

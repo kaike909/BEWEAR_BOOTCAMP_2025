@@ -3,6 +3,7 @@ import { MinusIcon, PlusIcon, TrashIcon } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 
+import { addProductToCart } from "@/actions/add-cart-product";
 import { decreaseProductFromCart } from "@/actions/decrease-cart-product-quantity";
 import { removeProductFromCart } from "@/actions/remove-cart-product";
 import { formatCents } from "@/helpers/money";
@@ -12,6 +13,7 @@ import { Button } from "../ui/button";
 interface CartItemProps {
     id: string;
     productName: string;
+    productVariantId: string;
     productVariantName: string;
     productVariantImageUrl: string;
     productVariantPriceInCents: number;
@@ -21,6 +23,7 @@ interface CartItemProps {
 const CardItem = ({
     id,
     productName,
+    productVariantId,
     productVariantName,
     productVariantImageUrl,
     productVariantPriceInCents,
@@ -43,10 +46,18 @@ const CardItem = ({
         },
     });
 
+    const increaseProductFromCartMutation = useMutation({
+        mutationKey: ["add-cart-product"],
+        mutationFn: () => addProductToCart({ productVariantId, quantity: 1 }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["cart"] });
+        },
+    });
+
     const handleDeleteClick = () => {
         removeProductFromCartMutation.mutate(undefined, {
             onSuccess: () => {
-                toast.success("Produto removido do carrinho");
+                toast.success("Produto removido do carrinho.");
             },
             onError: () => {
                 toast.error("Erro ao remover produto do carrinho.");
@@ -63,6 +74,17 @@ const CardItem = ({
             },
             onError: () => {
                 toast.error("Erro ao diminuir produto do carrinho.");
+            },
+        });
+    };
+
+    const handleIncreaseClick = () => {
+        increaseProductFromCartMutation.mutate(undefined, {
+            onSuccess: () => {
+                toast.success("Quantidade do produto aumentada.");
+            },
+            onError: () => {
+                toast.error("Erro ao aumentar produto do carrinho.");
             },
         });
     };
@@ -95,7 +117,7 @@ const CardItem = ({
                     <Button
                         className="w-4 h-4"
                         variant="ghost"
-                        onClick={() => {}}
+                        onClick={handleIncreaseClick}
                     >
                         <PlusIcon size={12} />
                     </Button>
