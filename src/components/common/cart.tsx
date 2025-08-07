@@ -1,8 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import { ShoppingBagIcon, ShoppingBasketIcon } from "lucide-react";
 
-import { getCart } from "@/actions/get-cart";
 import { formatCents } from "@/helpers/money";
+import { useCart } from "@/hooks/queries/use-cart";
 
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
@@ -17,10 +16,7 @@ import {
 import CartItem from "./cart-item";
 
 const Cart = () => {
-    const { data: cart, isPending: cartIsLoading } = useQuery({
-        queryKey: ["cart"],
-        queryFn: () => getCart(),
-    });
+    const { data: cart } = useCart();
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -66,7 +62,6 @@ const Cart = () => {
                             </div>
                         </ScrollArea>
                     </div>
-                    {cartIsLoading && <></>}
                     {cart?.items && cart?.items.length > 0 && (
                         <div className="flex flex-col gap-4">
                             <Separator />
