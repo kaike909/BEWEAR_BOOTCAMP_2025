@@ -20,9 +20,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCreateShippingAddress } from "@/hooks/mutations/use-create-shipping-address";
 
 const addressFormSchema = z.object({
-    email: z.string().email("E-mail inválido"),
+    email: z.email("E-mail inválido"),
     fullName: z.string().min(1, "Nome completo é obrigatório"),
     cpf: z
         .string()
@@ -42,6 +43,7 @@ type AddressFormValues = z.infer<typeof addressFormSchema>;
 
 const Addresses = () => {
     const [selectedAddress, setSelectedAddress] = useState<string | null>();
+    const createShippingAddressMutation = useCreateShippingAddress();
 
     const form = useForm<AddressFormValues>({
         resolver: zodResolver(addressFormSchema),
@@ -60,9 +62,16 @@ const Addresses = () => {
         },
     });
 
-    const onSubmit = (values: AddressFormValues) => {
-        console.log(values);
-        toast.success("Endereço adicionado com sucesso!");
+    const onSubmit = async (values: AddressFormValues) => {
+        try {
+            await createShippingAddressMutation.mutateAsync(values);
+            toast.success("Endereço adicionado com sucesso!");
+            form.reset();
+            setSelectedAddress(null);
+        } catch (error) {
+            toast.error("Erro ao salvar endereço. Tente novamente.");
+            console.error("Error creating shipping address:", error);
+        }
     };
 
     return (
@@ -334,8 +343,15 @@ const Addresses = () => {
                                     </div>
 
                                     <div className="flex justify-end pt-4">
-                                        <Button type="submit">
-                                            Salvar Endereço
+                                        <Button
+                                            type="submit"
+                                            disabled={
+                                                createShippingAddressMutation.isPending
+                                            }
+                                        >
+                                            {createShippingAddressMutation.isPending
+                                                ? "Salvando..."
+                                                : "Salvar Endereço"}
                                         </Button>
                                     </div>
                                 </form>
