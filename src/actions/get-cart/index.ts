@@ -19,6 +19,7 @@ export const getCart = async () => {
         where: (cart, { eq }) => eq(cart.userId, session.user.id),
         orderBy: (cart) => cart.id,
         with: {
+            shippingAddress: true,
             items: {
                 with: {
                     productVariant: {
@@ -37,7 +38,12 @@ export const getCart = async () => {
                 userId: session.user.id,
             })
             .returning();
-        return { ...newCart, items: [], totalPriceInCents: 0 };
+        return {
+            ...newCart,
+            items: [],
+            totalPriceInCents: 0,
+            shippingAddress: null,
+        };
     }
     return {
         ...cart,
