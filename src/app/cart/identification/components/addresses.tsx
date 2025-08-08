@@ -2,13 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { PatternFormat } from "react-number-format";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { getCart } from "@/actions/get-cart";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -25,6 +25,8 @@ import { shippingAddressTable } from "@/db/schema";
 import { useCreateShippingAddress } from "@/hooks/mutations/use-create-shipping-address";
 import { useUpdateCartShippingAddress } from "@/hooks/mutations/use-update-cart-shipping-address";
 import { useShippingAddresses } from "@/hooks/queries/use-shipping-addresses";
+
+import { formatAddress } from "../../helpers/address";
 
 const addressFormSchema = z.object({
     email: z.email("E-mail inválido"),
@@ -58,6 +60,7 @@ const Addresses = ({
     shippingAddresses,
     defaultShippingAddressId,
 }: AddressessProps) => {
+    const router = useRouter();
     const [selectedAddress, setSelectedAddress] = useState<string | null>(
         defaultShippingAddressId
     );
@@ -98,11 +101,12 @@ const Addresses = ({
         }
     };
 
-    const handleSelectExistingAddress = async (addressId: string) => {
+    const handleGoToPayment = async (addressId: string) => {
         try {
             await updateCartShippingAddressMutation.mutateAsync({
                 shippingAddressId: addressId,
             });
+            router.push("/cart/confirmation");
         } catch (error) {
             toast.error("Erro ao selecionar endereço. Tente novamente.");
             console.error("Error selecting shipping address:", error);
@@ -144,17 +148,7 @@ const Addresses = ({
                                                     className="cursor-pointer text-foreground"
                                                 >
                                                     <span className="font-medium">
-                                                        {address.recipientName}{" "}
-                                                        - {address.street},{" "}
-                                                        {address.number}
-                                                        {address.complement &&
-                                                            `, ${address.complement}`}{" "}
-                                                        - {address.neighborhood}
-                                                        , {address.city} -{" "}
-                                                        {address.state} - CEP:{" "}
-                                                        {formatCep(
-                                                            address.zipcode
-                                                        )}
+                                                        {formatAddress(address)}
                                                     </span>
                                                 </Label>
                                             </div>
@@ -466,9 +460,7 @@ const Addresses = ({
                 {selectedAddress !== "add_new" && selectedAddress !== "" && (
                     <div className="flex mt-6 justify-end w-full">
                         <Button
-                            onClick={() =>
-                                handleSelectExistingAddress(selectedAddress!)
-                            }
+                            onClick={() => handleGoToPayment(selectedAddress!)}
                             className="w-full rounded-full"
                             disabled={
                                 updateCartShippingAddressMutation.isPending
