@@ -80,28 +80,28 @@ const CardItem = ({
                     height={78}
                     className="rounded-lg"
                 />
-            </div>
-            <div className="flex flex-col gap-1">
-                <p className="text-sm font-semibold">{productName}</p>
-                <p className="text-muted-foreground text-xs font-medium">
-                    {productVariantName}
-                </p>
-                <div className="flex p-2 items-center w-[100px] border justify-between rounded-md">
-                    <Button
-                        className="w-4 h-4"
-                        variant="ghost"
-                        onClick={handleDecreaseClick}
-                    >
-                        <MinusIcon size={12} />
-                    </Button>
-                    <p className="text-xs font-medium">{quantity}</p>
-                    <Button
-                        className="w-4 h-4"
-                        variant="ghost"
-                        onClick={handleIncreaseClick}
-                    >
-                        <PlusIcon size={12} />
-                    </Button>
+                <div className="flex flex-col gap-1">
+                    <p className="text-sm font-semibold">{productName}</p>
+                    <p className="text-muted-foreground text-xs font-medium">
+                        {productVariantName}
+                    </p>
+                    <div className="flex p-2 items-center w-[100px] border justify-between rounded-md">
+                        <Button
+                            className="w-4 h-4"
+                            variant="ghost"
+                            onClick={handleDecreaseClick}
+                        >
+                            <MinusIcon size={12} />
+                        </Button>
+                        <p className="text-xs font-medium">{quantity}</p>
+                        <Button
+                            className="w-4 h-4"
+                            variant="ghost"
+                            onClick={handleIncreaseClick}
+                        >
+                            <PlusIcon size={12} />
+                        </Button>
+                    </div>
                 </div>
             </div>
             <div className="flex flex-col justify-center items-end gap-2">

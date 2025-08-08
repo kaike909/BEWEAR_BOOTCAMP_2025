@@ -16,7 +16,6 @@ export const useUpdateCartShippingAddress = () => {
         mutationFn: updateCartShippingAddress,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: getUseCartQueryKey() });
-            toast.success("Endereço de entrega atualizado com sucesso!");
         },
         onError: (error) => {
             toast.error(

@@ -131,7 +131,7 @@ const Addresses = ({
                         <>
                             {addresses.map((address) => (
                                 <Card key={address.id}>
-                                    <CardContent className="py-4">
+                                    <CardContent className="py-3">
                                         <div className="flex items-start gap-3">
                                             <RadioGroupItem
                                                 value={address.id}
@@ -159,24 +159,6 @@ const Addresses = ({
                                                 </Label>
                                             </div>
                                         </div>
-                                        {selectedAddress === address.id && (
-                                            <div className="mt-3 flex justify-end">
-                                                <Button
-                                                    onClick={() =>
-                                                        handleSelectExistingAddress(
-                                                            address.id
-                                                        )
-                                                    }
-                                                    disabled={
-                                                        updateCartShippingAddressMutation.isPending
-                                                    }
-                                                >
-                                                    {updateCartShippingAddressMutation.isPending
-                                                        ? "Processando..."
-                                                        : "Ir para pagamento"}
-                                                </Button>
-                                            </div>
-                                        )}
                                     </CardContent>
                                 </Card>
                             ))}
@@ -195,47 +177,26 @@ const Addresses = ({
                             </Card>
                         </>
                     )}
-                </RadioGroup>
-                {selectedAddress === "add_new" && (
-                    <Card className="mt-3">
-                        <CardHeader>
-                            <CardTitle>Novo Endereço</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <Form {...form}>
-                                <form
-                                    onSubmit={form.handleSubmit(onSubmit)}
-                                    className="space-y-4"
-                                >
-                                    <FormField
-                                        control={form.control}
-                                        name="email"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Email</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        placeholder="Digite seu email"
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {selectedAddress === "add_new" && (
+                        <Card className="mt-3">
+                            <CardHeader>
+                                <CardTitle>Novo Endereço</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <Form {...form}>
+                                    <form
+                                        onSubmit={form.handleSubmit(onSubmit)}
+                                        className="space-y-4"
+                                    >
                                         <FormField
                                             control={form.control}
-                                            name="fullName"
+                                            name="email"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <FormLabel>
-                                                        Nome Completo
-                                                    </FormLabel>
+                                                    <FormLabel>Email</FormLabel>
                                                     <FormControl>
                                                         <Input
-                                                            placeholder="Digite seu nome completo"
+                                                            placeholder="Digite seu email"
                                                             {...field}
                                                         />
                                                     </FormControl>
@@ -244,118 +205,136 @@ const Addresses = ({
                                             )}
                                         />
 
-                                        <FormField
-                                            control={form.control}
-                                            name="cpf"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>CPF</FormLabel>
-                                                    <FormControl>
-                                                        <PatternFormat
-                                                            customInput={Input}
-                                                            format="###.###.###-##"
-                                                            placeholder="000.000.000-00"
-                                                            value={field.value}
-                                                            onValueChange={(
-                                                                values
-                                                            ) => {
-                                                                field.onChange(
-                                                                    values.value
-                                                                );
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <FormField
+                                                control={form.control}
+                                                name="fullName"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Nome Completo
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                placeholder="Digite seu nome completo"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <FormField
+                                                control={form.control}
+                                                name="cpf"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            CPF
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <PatternFormat
+                                                                customInput={
+                                                                    Input
+                                                                }
+                                                                format="###.###.###-##"
+                                                                placeholder="000.000.000-00"
+                                                                value={
+                                                                    field.value
+                                                                }
+                                                                onValueChange={(
+                                                                    values
+                                                                ) => {
+                                                                    field.onChange(
+                                                                        values.value
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <FormField
+                                                control={form.control}
+                                                name="phone"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Celular
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <PatternFormat
+                                                                customInput={
+                                                                    Input
+                                                                }
+                                                                format="(##) #####-####"
+                                                                placeholder="(11) 99999-9999"
+                                                                value={
+                                                                    field.value
+                                                                }
+                                                                onValueChange={(
+                                                                    values
+                                                                ) => {
+                                                                    field.onChange(
+                                                                        values.value
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="zipCode"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            CEP
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <PatternFormat
+                                                                customInput={
+                                                                    Input
+                                                                }
+                                                                format="#####-###"
+                                                                placeholder="00000-000"
+                                                                value={
+                                                                    field.value
+                                                                }
+                                                                onValueChange={(
+                                                                    values
+                                                                ) => {
+                                                                    field.onChange(
+                                                                        values.value
+                                                                    );
+                                                                }}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
                                         <FormField
                                             control={form.control}
-                                            name="phone"
+                                            name="address"
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormLabel>
-                                                        Celular
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <PatternFormat
-                                                            customInput={Input}
-                                                            format="(##) #####-####"
-                                                            placeholder="(11) 99999-9999"
-                                                            value={field.value}
-                                                            onValueChange={(
-                                                                values
-                                                            ) => {
-                                                                field.onChange(
-                                                                    values.value
-                                                                );
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-
-                                        <FormField
-                                            control={form.control}
-                                            name="zipCode"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>CEP</FormLabel>
-                                                    <FormControl>
-                                                        <PatternFormat
-                                                            customInput={Input}
-                                                            format="#####-###"
-                                                            placeholder="00000-000"
-                                                            value={field.value}
-                                                            onValueChange={(
-                                                                values
-                                                            ) => {
-                                                                field.onChange(
-                                                                    values.value
-                                                                );
-                                                            }}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
-
-                                    <FormField
-                                        control={form.control}
-                                        name="address"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Endereço</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                        placeholder="Digite seu endereço"
-                                                        {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <FormField
-                                            control={form.control}
-                                            name="number"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>
-                                                        Número
+                                                        Endereço
                                                     </FormLabel>
                                                     <FormControl>
                                                         <Input
-                                                            placeholder="Digite o número"
+                                                            placeholder="Digite seu endereço"
                                                             {...field}
                                                         />
                                                     </FormControl>
@@ -364,103 +343,142 @@ const Addresses = ({
                                             )}
                                         />
 
-                                        <FormField
-                                            control={form.control}
-                                            name="complement"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>
-                                                        Complemento
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            placeholder="Apartamento, bloco, etc. (opcional)"
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <FormField
+                                                control={form.control}
+                                                name="number"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Número
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                placeholder="Digite o número"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
 
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <FormField
-                                            control={form.control}
-                                            name="neighborhood"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>
-                                                        Bairro
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            placeholder="Digite o bairro"
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+                                            <FormField
+                                                control={form.control}
+                                                name="complement"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Complemento
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                placeholder="Apartamento, bloco, etc. (opcional)"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
 
-                                        <FormField
-                                            control={form.control}
-                                            name="city"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>
-                                                        Cidade
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            placeholder="Digite a cidade"
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                            <FormField
+                                                control={form.control}
+                                                name="neighborhood"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Bairro
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                placeholder="Digite o bairro"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
 
-                                        <FormField
-                                            control={form.control}
-                                            name="state"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <FormLabel>
-                                                        Estado
-                                                    </FormLabel>
-                                                    <FormControl>
-                                                        <Input
-                                                            placeholder="Digite o estado"
-                                                            {...field}
-                                                        />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </div>
+                                            <FormField
+                                                control={form.control}
+                                                name="city"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Cidade
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                placeholder="Digite a cidade"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
 
-                                    <div className="flex justify-end pt-4">
-                                        <Button
-                                            type="submit"
-                                            disabled={
-                                                createShippingAddressMutation.isPending ||
+                                            <FormField
+                                                control={form.control}
+                                                name="state"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Estado
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                placeholder="Digite o estado"
+                                                                {...field}
+                                                            />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </div>
+
+                                        <div className="flex pt-4">
+                                            <Button
+                                                type="submit"
+                                                disabled={
+                                                    createShippingAddressMutation.isPending ||
+                                                    updateCartShippingAddressMutation.isPending
+                                                }
+                                                className="w-full rounded-full"
+                                            >
+                                                {createShippingAddressMutation.isPending ||
                                                 updateCartShippingAddressMutation.isPending
-                                            }
-                                        >
-                                            {createShippingAddressMutation.isPending ||
-                                            updateCartShippingAddressMutation.isPending
-                                                ? "Processando..."
-                                                : "Salvar Endereço"}
-                                        </Button>
-                                    </div>
-                                </form>
-                            </Form>
-                        </CardContent>
-                    </Card>
+                                                    ? "Processando..."
+                                                    : "Salvar Endereço"}
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </Form>
+                            </CardContent>
+                        </Card>
+                    )}
+                </RadioGroup>
+                {selectedAddress !== "add_new" && selectedAddress !== "" && (
+                    <div className="flex mt-6 justify-end w-full">
+                        <Button
+                            onClick={() =>
+                                handleSelectExistingAddress(selectedAddress!)
+                            }
+                            className="w-full rounded-full"
+                            disabled={
+                                updateCartShippingAddressMutation.isPending
+                            }
+                        >
+                            {updateCartShippingAddressMutation.isPending
+                                ? "Processando..."
+                                : "Ir para pagamento"}
+                        </Button>
+                    </div>
                 )}
             </CardContent>
         </Card>
