@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { shippingAddressTable } from "@/db/schema";
 import { useCreateShippingAddress } from "@/hooks/mutations/use-create-shipping-address";
 import { useShippingAddresses } from "@/hooks/queries/use-shipping-addresses";
 
@@ -46,11 +47,15 @@ const formatCep = (cep: string) => {
     return cep.replace(/(\d{5})(\d{3})/, "$1-$2");
 };
 
-const Addresses = () => {
+interface AddressessProps {
+    shippingAddresses: (typeof shippingAddressTable.$inferSelect)[];
+}
+
+const Addresses = ({ shippingAddresses }: AddressessProps) => {
     const [selectedAddress, setSelectedAddress] = useState<string | null>();
     const createShippingAddressMutation = useCreateShippingAddress();
     const { data: addresses = [], isLoading: isLoadingAddresses } =
-        useShippingAddresses();
+        useShippingAddresses({ initialData: shippingAddresses });
 
     const form = useForm<AddressFormValues>({
         resolver: zodResolver(addressFormSchema),
