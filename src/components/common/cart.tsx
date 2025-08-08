@@ -1,4 +1,5 @@
 import { ShoppingBagIcon, ShoppingBasketIcon } from "lucide-react";
+import Link from "next/link";
 
 import { formatCents } from "@/helpers/money";
 import { useCart } from "@/hooks/queries/use-cart";
@@ -90,7 +91,9 @@ const Cart = () => {
                             </div>
 
                             <Button className="mt-5 rounded-full">
-                                Finalizar compra
+                                <Link href="/cart/identification">
+                                    Finalizar compra
+                                </Link>
                             </Button>
                         </div>
                     )}
