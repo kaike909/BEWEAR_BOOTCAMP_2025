@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -25,9 +25,9 @@ const FinishOrderButton = () => {
     return (
         <>
             <Button
-                className="rounded-full w-full"
+                className="w-full rounded-full"
                 size="lg"
-                onClick={() => finishOrderMutation.mutate()}
+                onClick={handleFinishOrder}
                 disabled={finishOrderMutation.isPending}
             >
                 {finishOrderMutation.isPending && (
@@ -36,39 +36,36 @@ const FinishOrderButton = () => {
                 Finalizar compra
             </Button>
             <Dialog
-                open={handleFinishOrder}
+                open={successDialogIsOpen}
                 onOpenChange={setSuccessDialogIsOpen}
             >
                 <DialogContent className="text-center">
                     <Image
                         src="/order_success.svg"
-                        alt="Order Success"
-                        width={251}
-                        height={234}
+                        alt="Success"
+                        width={300}
+                        height={300}
                         className="mx-auto"
                     />
-                    <DialogTitle className="flex flex-row items-center justify-center gap-3 mt-4">
-                        <span className="text-2xl font-semibold ">
-                            Pedido confirmado!
-                        </span>
-                        <span className="font-semibold ">
-                            <CheckIcon color="green" size={35} />
-                        </span>
+                    <DialogTitle className="mt-4 text-2xl">
+                        Pedido efetuado!
                     </DialogTitle>
                     <DialogDescription className="font-medium">
                         Seu pedido foi efetuado com sucesso. Você pode
                         acompanhar o status na seção de “Meus Pedidos”.
                     </DialogDescription>
+
                     <DialogFooter>
-                        <Button
-                            variant="outline"
-                            className="rounded-full text-lg"
-                            size="lg"
-                        >
-                            <Link href="/">Página inicial</Link>
-                        </Button>
-                        <Button className="rounded-full text-lg" size="lg">
+                        <Button className="rounded-full" size="lg">
                             Ver meus pedidos
+                        </Button>
+                        <Button
+                            className="rounded-full"
+                            variant="outline"
+                            size="lg"
+                            asChild
+                        >
+                            <Link href="/">Voltar para a loja</Link>
                         </Button>
                     </DialogFooter>
                 </DialogContent>
